@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>WebSocket Tester</title>
+<script language="javascript" type="text/javascript">
+
+    var wsUri = "ws://127.0.0.1:1234";
+    var output;
+
+    function init() {
+        output = document.getElementById("output");
+        testWebSocket();
+    }
+
+    function testWebSocket() {
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function (evt) { onOpen(evt) };
+        websocket.onclose = function (evt) { onClose(evt) };
+        websocket.onmessage = function (evt) { onMessage(evt) };
+        websocket.onerror = function (evt) { onError(evt) };
+    }
+
+    function onOpen(evt) {
+        writeToScreen("Connected to WebSocket at "+ wsUri);
+        doSend("WebSockets rock!");
+    }
+
+    function onClose(evt) {
+        writeToScreen("Disconnected");
+    }
+
+    function onMessage(evt) {
+        writeToScreen("<span style='color: blue;'>Response: " + evt.data + "</span>");
+    }
+
+    function onError(evt) {
+        writeToScreen("<span style='color: red;'>Error:</span>" + evt.data);
+    }
+
+    function doSend(msg) {
+        writeToScreen("Sent: " + msg);
+        websocket.send(msg);
+    }
+
+    function writeToScreen(msg) {
+        var pre = document.createElement("p");
+        pre.style.wordWrap = "break-word";
+        pre.innerHTML = msg;
+        output.appendChild(pre);
+    }
+
+    window.addEventListener("load", init, false);
+
+</script>
+
+<h2>WebSocket Tester</h2>
+
+<div id="output"></div>
